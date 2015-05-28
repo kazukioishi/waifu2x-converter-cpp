@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 2.8)
+project(waifu2x-converter-cpp)
+find_package(OpenCV REQUIRED)
+include_directories("./include")
+add_executable(waifu2x src/main.cpp src/modelHandler.cpp)
+TARGET_LINK_LIBRARIES(waifu2x opencv_core opencv_imgproc opencv_imgcodecs opencv_features2d)
+set_property(TARGET waifu2x PROPERTY CXX_STANDARD 11)
