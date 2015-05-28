@@ -1,3 +1,7 @@
+# これ何
+--useopenclをオプションをつけたりとかcmakeを叩くだけで簡単にビルド出来るようにしました。 
+OpenCLを有効化すると滅茶苦茶遅くなるのでおすすめしません。(多分最適化不足だと思われ)
+
 # waifu2x (converter only version)
 
 This is a reimplementation of waifu2x ([original](https://github.com/nagadomi/waifu2x)) converter function, in C++, using OpenCV.
