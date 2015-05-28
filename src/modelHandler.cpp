@@ -9,6 +9,7 @@
  */
 
 #include "modelHandler.hpp"
+#include "main.hpp"
 // #include <iostream> in modelHandler.hpp
 #include <fstream>
 #include <thread>
@@ -116,15 +117,15 @@ bool Model::filterWorker(std::vector<cv::Mat> &inputPlanes,
 		std::vector<cv::Mat> &weightMatrices,
 		std::vector<cv::Mat> &outputPlanes, unsigned int beginningIndex,
 		unsigned int nWorks) {
-
+	
+	cv::ocl::setUseOpenCL(UseOpenCL);
 	cv::Size ipSize = inputPlanes[0].size();
 	// filter processing
 	// input : inputPlanes
 	// kernel : weightMatrices
 	for (int opIndex = beginningIndex; opIndex < (beginningIndex + nWorks);
 			opIndex++) {
-		cv::ocl::setUseOpenCL(false); // disable OpenCL Support(temporary)
-
+		
 		int wMatIndex = nInputPlanes * opIndex;
 		cv::Mat outputPlane = cv::Mat::zeros(ipSize, CV_32FC1);
 		cv::UMat uIntermediatePlane = outputPlane.getUMat(cv::ACCESS_WRITE); // all zero matrix

@@ -14,11 +14,12 @@
 #include <fstream>
 #include <string>
 #include <cmath>
+#include <sys/time.h>
 #include "picojson.h"
 #include "tclap/CmdLine.h"
 
 #include "modelHandler.hpp"
-
+#include "main.hpp"
 using namespace cv;
 
 int main(int argc, char** argv) {
@@ -60,6 +61,8 @@ int main(int argc, char** argv) {
 			"number of threads launching at the same time", false, 4, "integer",
 			cmd);
 
+    TCLAP::SwitchArg cmdUseCL("", "useopencl", "Use the OpenCL acceleration.", cmd, false);
+
 	// definition of command line argument : end
 
 	// parse command line arguments
@@ -70,6 +73,15 @@ int main(int argc, char** argv) {
 		std::cerr << "Error : cmd.parse() threw exception" << std::endl;
 		std::exit(-1);
 	}
+
+    //set useOpenCL
+	if(cmdUseCL.getValue()){
+		std::cout << "Using OpenCL...." << std::endl;
+		UseOpenCL = true;
+	}
+	//timer
+	struct timeval startTime, finishTime;
+	gettimeofday(&startTime, NULL);
 
 	// load image file
 	cv::Mat image = cv::imread(cmdInputFile.getValue(), cv::IMREAD_COLOR);
@@ -241,9 +253,11 @@ int main(int argc, char** argv) {
 		outputFileName += ".png";
 	}
 	cv::imwrite(outputFileName, image);
-
+	
+	gettimeofday(&finishTime, NULL);
+	std::cout << (finishTime.tv_sec - startTime.tv_sec) * 1000 + (finishTime.tv_usec - startTime.tv_usec) / 1000 << "msec." << std::endl;
 	std::cout << "process successfully done!" << std::endl;
-
+	
 	return 0;
 }
 
